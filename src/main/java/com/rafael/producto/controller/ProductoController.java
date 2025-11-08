@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -19,12 +20,14 @@ public class ProductoController {
 
     private final ProductoServicio productoService;
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping
     public ResponseEntity<List<ProductoDTO>> listar() {
         List<ProductoDTO> productos = productoService.listarTodos();
         return ResponseEntity.ok(productos);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ProductoDTO> crear(@Valid @RequestBody ProductoDTO dto) {
         ProductoDTO creado = productoService.crear(dto);
@@ -33,18 +36,21 @@ public class ProductoController {
         return ResponseEntity.created(location).body(creado);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<ProductoDTO> obtener(@PathVariable Long id) {
         ProductoDTO producto = productoService.obtenerPorId(id);
         return ResponseEntity.ok(producto);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ProductoDTO> actualizar(@PathVariable Long id, @Valid @RequestBody ProductoDTO dto) {
         ProductoDTO actualizado = productoService.actualizar(id, dto);
         return ResponseEntity.ok(actualizado);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         productoService.eliminar(id);
