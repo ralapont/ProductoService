@@ -1,6 +1,7 @@
 package com.rafael.producto.service.impl;
 
 import com.rafael.producto.dto.ProductoDTO;
+import com.rafael.producto.exception.CodigoProductoNoEncontradoException;
 import com.rafael.producto.exception.ProductoNoEncontradoException;
 import com.rafael.producto.mapper.ProductoMapper;
 import com.rafael.producto.model.entity.Producto;
@@ -8,6 +9,7 @@ import com.rafael.producto.model.respository.ProductoRepository;
 import com.rafael.producto.service.ProductoServicio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,6 +60,15 @@ public class ProductoServiceImpl implements ProductoServicio {
             throw new ProductoNoEncontradoException(id);
         }
         productoRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public ProductoDTO actualizarStock(String codigo, Integer stock) {
+        productoRepository.actualizarStock(codigo, stock);
+        Producto existente = productoRepository.findByCodigo(codigo)
+                .orElseThrow(() -> new CodigoProductoNoEncontradoException(codigo));
+        return productoMapper.toDTO(existente);
     }
 
 

@@ -3,6 +3,7 @@ package com.rafael.producto.controller;
 import com.rafael.producto.dto.ProductoDTO;
 import com.rafael.producto.service.ProductoServicio;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.QueryParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -55,5 +56,14 @@ public class ProductoController {
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         productoService.eliminar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/{codigo}")
+    public ResponseEntity<ProductoDTO> actualizarStock(
+            @PathVariable String codigo,
+            @QueryParam("stock") Integer stock) {
+        ProductoDTO producto = productoService.actualizarStock(codigo, stock);
+        return ResponseEntity.ok(producto);
     }
 }

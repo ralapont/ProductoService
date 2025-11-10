@@ -10,4 +10,5 @@ public interface ProductoServicio {
     ProductoDTO obtenerPorId(Long id);
     ProductoDTO actualizar(Long id, ProductoDTO dto);
     void eliminar(Long id);
+    ProductoDTO actualizarStock(String codigo, Integer stock);
 }
