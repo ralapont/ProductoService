@@ -9,7 +9,7 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 
 public class JwtUtil {
-    private static final String SECRET = "clave_super_secreta_y_segura_para_firmar_jwt_12345678901234567890";;
+    private static final String SECRET = "TuClaveSecretaSuperSegura1234567890";;
 
     private static final SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
 

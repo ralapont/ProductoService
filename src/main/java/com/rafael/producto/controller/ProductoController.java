@@ -58,6 +58,14 @@ public class ProductoController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @GetMapping( "/codigo")
+    public ResponseEntity<ProductoDTO> obtenerProductoCodigo(
+            @QueryParam("codigo") String codigo) {
+        ProductoDTO producto = productoService.obtenerProductoCodigo(codigo);
+        return ResponseEntity.ok(producto);
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{codigo}")
     public ResponseEntity<ProductoDTO> actualizarStock(

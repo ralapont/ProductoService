@@ -71,5 +71,12 @@ public class ProductoServiceImpl implements ProductoServicio {
         return productoMapper.toDTO(existente);
     }
 
+    @Override
+    public ProductoDTO obtenerProductoCodigo(String codigo) {
+        Producto producto = productoRepository.findByCodigo(codigo)
+                .orElseThrow(() -> new CodigoProductoNoEncontradoException(codigo));
+        return productoMapper.toDTO(producto);
+    }
+
 
 }
