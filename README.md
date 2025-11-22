@@ -72,3 +72,49 @@ Counter pedidosCounter = Counter.builder("productos_creados_total")
 pedidosCounter.increment();
 
 Con esto, el producto-service queda listo para ser scrapeado por Prometheus en el siguiente paso.
+
+## 📊 Observabilidad con Prometheus
+
+Este proyecto utiliza **Prometheus** para recolectar métricas de los microservicios.  
+Cada servicio expone métricas a través del endpoint `/actuator/prometheus` de Spring Boot Actuator.
+
+### Configuración de Prometheus solo se configura en prometheus-server
+
+El archivo principal de configuración es `prometheus.yml`.  
+Contiene las siguientes secciones clave:
+
+- **global**: define intervalos de scrape y evaluación por defecto.
+- **scrape_configs**: lista de jobs que indican qué servicios monitorear.
+- **alerting** y **rule_files**: opcionales, para integrar con Alertmanager y reglas de alertas.
+
+Ejemplo de configuración mínima adaptada a nuestra arquitectura:
+
+```yaml
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'producto-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['localhost:8080']
+
+  - job_name: 'pedido-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['localhost:8081']
+
+  - job_name: 'cliente-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['localhost:8082']
+
+  - job_name: 'auth-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['localhost:8083']
