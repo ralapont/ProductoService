@@ -67,7 +67,7 @@ public class ProductoController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PatchMapping("/{codigo}")
+    @PutMapping("/{codigo}")
     public ResponseEntity<ProductoDTO> actualizarStock(
             @PathVariable String codigo,
             @QueryParam("stock") Integer stock) {

@@ -1,6 +1,7 @@
 package com.rafael.producto.controller;
 
 import com.rafael.producto.exception.CategoriaNotFoundException;
+import com.rafael.producto.exception.CodigoProductoNoEncontradoException;
 import com.rafael.producto.exception.ProductoNoEncontradoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ProductoNoEncontradoException.class)
     public ResponseEntity<Map<String, String>> manejarProductoNoEncontrado(ProductoNoEncontradoException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "Producto no encontrado");
+        error.put("detalle", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(CodigoProductoNoEncontradoException.class)
+    public ResponseEntity<Map<String, String>> manejarCodigoProductoNoEncontradoException(CodigoProductoNoEncontradoException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("error", "Producto no encontrado");
         error.put("detalle", ex.getMessage());
