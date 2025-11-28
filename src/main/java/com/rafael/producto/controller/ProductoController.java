@@ -61,16 +61,16 @@ public class ProductoController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping( "/codigo")
     public ResponseEntity<ProductoDTO> obtenerProductoCodigo(
-            @QueryParam("codigo") String codigo) {
+            @RequestParam("codigo") String codigo) {
         ProductoDTO producto = productoService.obtenerProductoCodigo(codigo);
         return ResponseEntity.ok(producto);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/{codigo}")
+    @PutMapping("/{codigo}/stock")
     public ResponseEntity<ProductoDTO> actualizarStock(
             @PathVariable String codigo,
-            @QueryParam("stock") Integer stock) {
+            @RequestParam("stock") Integer stock) {
         ProductoDTO producto = productoService.actualizarStock(codigo, stock);
         return ResponseEntity.ok(producto);
     }

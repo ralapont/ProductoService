@@ -8,12 +8,14 @@ import com.rafael.producto.model.entity.Producto;
 import com.rafael.producto.model.respository.ProductoRepository;
 import com.rafael.producto.service.ProductoServicio;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductoServiceImpl implements ProductoServicio {
@@ -65,6 +67,7 @@ public class ProductoServiceImpl implements ProductoServicio {
     @Override
     @Transactional
     public ProductoDTO actualizarStock(String codigo, Integer stock) {
+        log.info("Actualizando stock del producto con código {}: {}", codigo, stock);
         productoRepository.actualizarStock(codigo, stock);
         Producto existente = productoRepository.findByCodigo(codigo)
                 .orElseThrow(() -> new CodigoProductoNoEncontradoException(codigo));
@@ -73,6 +76,7 @@ public class ProductoServiceImpl implements ProductoServicio {
 
     @Override
     public ProductoDTO obtenerProductoCodigo(String codigo) {
+        log.info("Obteniendo producto con código: {}", codigo);
         Producto producto = productoRepository.findByCodigo(codigo)
                 .orElseThrow(() -> new CodigoProductoNoEncontradoException(codigo));
         return productoMapper.toDTO(producto);
